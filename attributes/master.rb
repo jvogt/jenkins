@@ -33,7 +33,7 @@ default['jenkins']['master'].tap do |master|
   #   node.set['jenkins']['master']['install_method'] = 'war'
   #
   master['install_method'] = case node['platform_family']
-                             when 'debian', 'rhel' then 'package'
+                             when 'debian', 'rhel', 'windows' then 'package'
                              else 'war'
                              end
 
@@ -172,7 +172,11 @@ default['jenkins']['master'].tap do |master|
   # configuration and build artifacts. You should ensure this directory resides
   # on a volume with adequate disk space.
   #
-  master['home'] = '/var/lib/jenkins'
+  if node['platform_family'] == 'windows'
+    master['home'] = 'C:\Program Files (x86)\Jenkins'
+  else
+    master['home'] = '/var/lib/jenkins'
+  end
 
   #
   # The directory where Jenkins should write its logfile(s). **This attribute

@@ -69,8 +69,12 @@ when 'rhel'
     mode     '0644'
     notifies :restart, 'service[jenkins]', :immediately
   end
+when 'windows'
+  include_recipe 'chocolatey'
+  chocolatey 'jenkins' do
+    action :install
+  end
 end
-
 service 'jenkins' do
   supports status: true, restart: true, reload: true
   action [:enable, :start]
